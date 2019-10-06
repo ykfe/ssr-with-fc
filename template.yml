@@ -1,0 +1,20 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  ssr:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'fc ssr'
+    page:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        CodeUri: '.'
+        Description: 'fc ssr demo with nodejs8!'
+        Runtime: nodejs8
+      Events:
+        http-test:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['GET']
