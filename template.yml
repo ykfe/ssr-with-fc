@@ -12,7 +12,6 @@ Resources:
         CodeUri: '.'
         Description: 'fc ssr demo with nodejs8!'
         Runtime: nodejs8
-        # Initializer: index.initializer
       Events:
         http-test:
           Type: HTTP

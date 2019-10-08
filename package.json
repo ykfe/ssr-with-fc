@@ -10,7 +10,9 @@
     "ykfe-utils": "^2.0.2"
   },
   "scripts": {
-    "start": "concurrently \"NODE_ENV=development fun local start\" \"cross-env NODE_ENV=development webpack --watch --config ./build/webpack.config.server.js\"",
+    "start": "concurrently \"npm run ssr\" \"npm run csr\"",
+    "ssr": "concurrently \"NODE_ENV=development fun local start\" \"cross-env NODE_ENV=development webpack --watch --config ./build/webpack.config.server.js\"",
+    "csr": "cross-env NODE_ENV=development ykcli dev --PORT 8888",
     "prod": "npm run build && eggctl start",
     "deploy": "npm run build && rimraf node_modules && npm i --production && fun deploy",
     "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.config.server.js",

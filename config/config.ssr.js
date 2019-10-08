@@ -1,11 +1,9 @@
 const resolvePath = (path) => require('path').resolve(__dirname, path)
-const isDev = (process.env.NODE_ENV === 'development') || process.env.local
-// const staticPrefix = isDev ? 'http://localhost:8888/2016-08-15/proxy/ssr/page' : '' // 静态资源路径前缀
-const staticPrefix = '/2016-08-15/proxy/ssr/page' // 静态资源路径前缀
+const prefix = '/2016-08-15/proxy/ssr/page' // 静态资源路径前缀
 
 module.exports = {
   type: 'ssr', // 指定运行类型可设置为csr切换为客户端渲染
-  prefix: '/2016-08-15/proxy/ssr/page',
+  prefix,
   routes: [
     {
       path: '/',
@@ -24,12 +22,12 @@ module.exports = {
   ],
   baseDir: resolvePath('../'),
   injectCss: [
-    `${staticPrefix}/static/css/Page.chunk.css`
+    `${prefix}/static/css/Page.chunk.css`
   ], // 客户端需要加载的静态样式表
   injectScript: [
-    `<script src='${staticPrefix}/static/js/runtime~Page.js'></script>`,
-    `<script src='${staticPrefix}/static/js/vendor.chunk.js'></script>`,
-    `<script src='${staticPrefix}/static/js/Page.chunk.js'></script>`
+    `<script src='${prefix}/static/js/runtime~Page.js'></script>`,
+    `<script src='${prefix}/static/js/vendor.chunk.js'></script>`,
+    `<script src='${prefix}/static/js/Page.chunk.js'></script>`
   ], // 客户端需要加载的静态资源文件表
   serverJs: resolvePath(`../dist/Page.server.js`)
 }
