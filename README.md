@@ -1,6 +1,6 @@
 # SSR 结合 阿里云 FC(function computed) 示例
 
-本项目将我们的[egg-react-ssr](https://github.com/ykfe/egg-react-ssr)项目与阿里云serverless函数计算服务[FC](https://help.aliyun.com/document_detail/52895.html?spm=a2c4g.11186623.6.541.45c9368bqWeNxZ)进行整合，在
+本项目将我们的[egg-react-ssr](https://github.com/ykfe/egg-react-ssr)项目与阿里云Serverless函数计算服务[FC](https://help.aliyun.com/document_detail/52895.html?spm=a2c4g.11186623.6.541.45c9368bqWeNxZ)进行整合，在
 
 ## 开始使用 
 
@@ -12,8 +12,8 @@
 
 ```
 $ npm i
-$ npm run build
 $ npm start
+$ open http://localhost:8000/2016-08-15/proxy/ssr/page/
 ```
 
 ## 线上发布
