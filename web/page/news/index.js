@@ -18,7 +18,7 @@ function News (props) {
 }
 
 News.getInitialProps = (ctx) => {
-  const newsId = __isBrowser__ ? ctx.match.params.id : ctx.params.id
+  const newsId = __isBrowser__ ? ctx.match.params.id : ctx.req.params.id
   return Promise.resolve({
     newsDetail: mockData[newsId]
   })
