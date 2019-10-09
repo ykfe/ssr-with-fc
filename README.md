@@ -1,10 +1,39 @@
-# SSR 结合 阿里云 FC(function computed) 示例
+# SSR 结合 阿里云 Serverless FC(function computed) 示例
 
 本项目将我们的[egg-react-ssr](https://github.com/ykfe/egg-react-ssr)项目与阿里云Serverless函数计算服务[FC](https://help.aliyun.com/document_detail/52895.html?spm=a2c4g.11186623.6.541.45c9368bqWeNxZ)进行整合，在
+
+## Serverless
+
+> Serverless 架构是指大量依赖第三方服务（也叫做后端即服务，即“BaaS”）或暂存容器中运行的自定义代码（函数即服务，即“FaaS”）的应用程序，函数是无服务器架构中抽象语言运行时的最小单位。在这种架构中，我们并不看重运行一个函数需要多少 CPU 或 RAM 或任何其他资源，而是更看重运行函数所需的时间，我们也只为这些函数的运行时间付费。
 
 ## 开始使用 
 
 使用之前确保电脑已经安装好[docker](https://github.com/alibaba/funcraft/blob/master/docs/usage/installation-zh.md)并且启动，且全局安装[@alicloud/fun](https://github.com/alibaba/funcraft/blob/master/docs/usage/installation-zh.md)
+
+## 配置文件介绍
+
+```yaml
+ROSTemplateFormatVersion: '2015-09-01' # fc固定格式内容要求
+Transform: 'Aliyun::Serverless-2018-04-03' # fc固定格式内容要求
+Resources:
+  ssr: # server name 服务名
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'fc ssr demo'
+    page: # function name 方法名
+      Type: 'Aliyun::Serverless::Function' # 字段类型
+      Properties:
+        Handler: index.handler
+        CodeUri: '.' # 工作目录
+        Description: 'fc ssr demo with nodejs8!'
+        Runtime: nodejs8 # 运行环境
+      Events:
+        http-test:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['GET'] # 支持的方法
+```
 
 ## 本地运行
 
@@ -17,11 +46,19 @@ $ open http://localhost:8000/2016-08-15/proxy/ssr/page/ // 以FC SSR 模式运�
 $ open http://localhost:8888/2016-08-15/proxy/ssr/page/ // 以 CSR 模式运行
 ```
 
+注：FC启动的应用链接规范为 `http://localhost:8000/2016-08-15/proxy/${service name}/${function name}/`
+
 ## 执行流程
 
-首先我们用了express作为我们的Node框架，之所以不用FC原生的http trigger(触发器)提供的对象，是因为我们需要用到静态资源托管这个功能，且FC原生的请求上下文对象是经过处理后的http模块提供的req, res 对象，在属性上有一些缺失。
+这里简单介绍一下FC-SSR应用的执行流程
 
-关于FC如何接入express请查看该[文章](https://github.com/muxiangqiu/fc-express-nodejs8)
+![](https://img.alicdn.com/tfs/TB1V_57iAT2gK0jSZFkXXcIQFXa-1948-702.jpg)
+
+### 使用express代替原生的http trigger提供的对象
+
+首先, 我们用了express作为我们的Node框架，之所以不用FC原生的http trigger(触发器)提供的对象，是因为我们生产环境需要用到静态资源托管这个功能，且FC原生的请求上下文对象是http模块提供的(req, res)经过处理后的对象，在属性上有一些缺失。
+
+关于FC如何接入express请查看该[教程](https://github.com/muxiangqiu/fc-express-nodejs8)
 
 ### 代理前端静态资源支持HMR
 
@@ -37,6 +74,13 @@ $ open http://localhost:8888/2016-08-15/proxy/ssr/page/ // 以 CSR 模式运行
 
 这里有一个需要注意的地方就是，HMR功能需要去加载一个 `hot-update.json` 这样的文件来实现，但是webpack会用当前页面的端口以及publicPath作为路径去下载该文件。如果我们还是和之前一样设置`publicPath='/'`的话，那么实际请求的路径是`localhost:8000/hot-update.json` 这样的路径并没有被我们的FC应用的http触发器所监听到，所以不会触发Proxy，必须得是`localhost:8000/2016-08-15/proxy/ssr/page/xxx`这样的路径才会触发，所以我们需要设置 `publicPath='/2016-08-15/proxy/ssr/page/'`
 
+### docker 应用访问宿主机服务
+
+由于我们的前端静态资源是在宿主机而不是在docker中启动的，所以我们没办法在FC应用中通过localhost来访问宿主机资源，这里有两种方式
+
+- 通过ifconfig查看本机ip，替换localhost
+- 使用host.docker.internal来访问宿主机服务
+
 ## 线上发布
 
 由于FC有应用发布大小的限制，所以与egg-react-ssr项目不同，生产环境我们修改了`webpack.config.server.js`去除了`externanls`选项来将一些第三方库与我们的bundle.server.js打在了一起，经过测试在生产环境压缩后的bundle.server.js在200kb左右时性能无明显影响，但当第三方库过多时如果超过几MB时对性能有影响。优点是我们不需要将node_modules上传到云端了发布速度更快。
@@ -45,3 +89,32 @@ $ open http://localhost:8888/2016-08-15/proxy/ssr/page/ // 以 CSR 模式运行
 ```
 $ npm run deploy
 ```
+
+## 与传统方案对比
+
+相较于我们传统的应用发布方案，Serverless存在以下诸多优势
+
+- 降低启动成本
+- 实现快速上线
+- 系统安全性更高
+- 自动扩缩容能力
+
+### 降低启动成本
+
+当我们作为一家公司开发一个 Web 应用时，在开发的时候，我们需要版本管理服务器、持续集成服务器、测试服务器、应用版本管理仓库等作为基础的服务。线上运行的时候，为了应对大量的请求，我们需要一个好的数据库服务器。当我们的应用面向了普通的用户时，我们需要：
+邮件服务，用于发送提醒、注册等服务
+短信服务（依国家实名规定），用于注册、登录等用户授权操作
+对于大公司而言，这些都是现成的基础设施。可对于新创企业来说，这都是一些启动成本。
+
+### 快速上线
+
+对于一个 Web 项目来说，启动一个项目需要一系列的 hello, world。当我们在本地搭建环境的时候，是一个 hello, world，当我们将程序部署到开发环境时，也是一个部署相关的 hello, world。虽然看上去有些不同，但是总的来说，都是 it works!。
+Serverless 在部署上的优势，使得你可以轻松地实现上线。
+
+### 系统安全性更高
+
+在 Serverless 架构下每个函数都是独立容器运行互不干扰，并且我们不需要操心服务器被攻击的事情了，这些问题云服务商都会帮我们解决
+
+### 自动扩缩容
+
+Serverless第二个常被提及的特点是自动扩缩容。前面说了函数即应用，一个函数只做一件事，可以独立的进行扩缩容，而不用担心影响其他函数，并且由于粒度更小，扩缩容速度也更快。而对于单体应用和微服务，借助于各种容器编排技术，虽然也能实现自动扩缩容，但由于粒度关系，相比函数，始终会存在一定的资源浪费。比如一个微服务提供两个API，其中一个API需要进行扩容，而另一个并不需要，那么这时候扩容，对于不需要的API就是一种浪费。
