@@ -4,7 +4,7 @@ Resources:
   ssr:
     Type: 'Aliyun::Serverless::Service'
     Properties:
-      Description: 'fc ssr'
+      Description: 'fc ssr demo'
     page:
       Type: 'Aliyun::Serverless::Function'
       Properties:

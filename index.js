@@ -1,7 +1,6 @@
-
 const { Server } = require('@webserverless/fc-express')
-const { server } = require('./createExpressServer')
 const getRawBody = require('raw-body')
+const { server } = require('./createExpressServer')
 const proxyServer = new Server(server)
 
 // http trigger
