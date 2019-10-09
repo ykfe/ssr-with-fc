@@ -1,14 +1,16 @@
 # SSR 结合 阿里云 Serverless FC(function computed) 示例
 
-本项目将我们的[egg-react-ssr](https://github.com/ykfe/egg-react-ssr)项目与阿里云Serverless函数计算服务[FC](https://help.aliyun.com/document_detail/52895.html?spm=a2c4g.11186623.6.541.45c9368bqWeNxZ)进行整合，在
+在本项目中，我们将[egg-react-ssr](https://github.com/ykfe/egg-react-ssr)项目运行在阿里云Serverless函数计算服务[FC](https://help.aliyun.com/document_detail/52895.html?spm=a2c4g.11186623.6.541.45c9368bqWeNxZ)上
 
 ## Serverless
 
 > Serverless 架构是指大量依赖第三方服务（也叫做后端即服务，即“BaaS”）或暂存容器中运行的自定义代码（函数即服务，即“FaaS”）的应用程序，函数是无服务器架构中抽象语言运行时的最小单位。在这种架构中，我们并不看重运行一个函数需要多少 CPU 或 RAM 或任何其他资源，而是更看重运行函数所需的时间，我们也只为这些函数的运行时间付费。
 
+即我们只需要关注每一个函数自身的逻辑，而不用操心运行环境等细节，当有事件到来时触发执行，根据执行情况可以卸载。免去管理基础设施、网络资源、实例缩放和系统负载平衡的困扰。您只需要上传您的代码到云服务，它会保障您应用的高可用性和高可拓展性。可以更专注于开发业务逻辑
+
 ## 开始使用 
 
-使用之前确保电脑已经安装好[docker](https://github.com/alibaba/funcraft/blob/master/docs/usage/installation-zh.md)并且启动，且全局安装[@alicloud/fun](https://github.com/alibaba/funcraft/blob/master/docs/usage/installation-zh.md)
+使用之前确保电脑已经安装好[docker](https://github.com/alibaba/funcraft/blob/master/docs/usage/installation-zh.md)并且启动，且全局安装[@alicloud/fun](https://github.com/alibaba/funcraft/blob/master/docs/usage/installation-zh.md), 并且通过`fun config`进行账户的身份信息设置
 
 ## 配置文件介绍
 
@@ -90,7 +92,7 @@ $ open http://localhost:8888/2016-08-15/proxy/ssr/page/ // 以 CSR 模式运行
 $ npm run deploy
 ```
 
-## 与传统方案对比
+## Serverless与传统方案对比
 
 相较于我们传统的应用发布方案，Serverless存在以下诸多优势
 
@@ -113,8 +115,12 @@ Serverless 在部署上的优势，使得你可以轻松地实现上线。
 
 ### 系统安全性更高
 
-在 Serverless 架构下每个函数都是独立容器运行互不干扰，并且我们不需要操心服务器被攻击的事情了，这些问题云服务商都会帮我们解决
+在 Serverless 架构下每个函数都是独立虚拟机级别环境运行互不干扰，并且我们不需要操心服务器被攻击的事情了，这些问题云服务商都会帮我们解决
 
 ### 自动扩缩容
 
 Serverless第二个常被提及的特点是自动扩缩容。前面说了函数即应用，一个函数只做一件事，可以独立的进行扩缩容，而不用担心影响其他函数，并且由于粒度更小，扩缩容速度也更快。而对于单体应用和微服务，借助于各种容器编排技术，虽然也能实现自动扩缩容，但由于粒度关系，相比函数，始终会存在一定的资源浪费。比如一个微服务提供两个API，其中一个API需要进行扩容，而另一个并不需要，那么这时候扩容，对于不需要的API就是一种浪费。
+
+## 未来可优化空间
+
+目前看起来本项目所包含的文件还是略有多余。在之后我们将会将egg, koa, express 等框架内置进 faasruntime，启动的时候指定框架类型即可。且相关的webpack配置之后将会以脚手架的形式进行封装而不暴露在应用内部
