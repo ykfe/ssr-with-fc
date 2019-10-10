@@ -1,6 +1,6 @@
 import express from 'express'
-import { renderToStream } from 'ykfe-utils'
-import ssrConfig from './config/config.ssr'
+const ssrConfig = require('./config/config.ssr')
+const { renderToStream } = require('ykfe-utils')
 
 const isDev = process.env.local
 

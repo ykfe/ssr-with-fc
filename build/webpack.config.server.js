@@ -20,7 +20,6 @@ if (process.env.npm_config_report === 'true') {
 module.exports = merge(baseConfig, {
   devtool: isDev ? 'eval-source-map' : '',
   entry: {
-    Page: paths.entry,
     FC: paths.fc
   },
   stats: {
@@ -29,7 +28,7 @@ module.exports = merge(baseConfig, {
   },
   target: 'node',
   // 生产环境将第三方依赖与bundle.server.js打包在一起发布到fc
-  externals: false ? nodeExternals({
+  externals: isDev ? nodeExternals({
     whitelist: /\.(css|less|sass|scss)$/
   }) : '',
   output: {

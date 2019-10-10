@@ -5,7 +5,7 @@ const prefix = isDev ? '/2016-08-15/proxy/ssr/page' : '' // 静态资源路径�
 module.exports = {
   type: 'ssr', // 指定运行类型可设置为csr切换为客户端渲染
   prefix,
-  externals: false,
+  runtime: 'fc',
   routes: [
     {
       path: '/',
@@ -30,5 +30,5 @@ module.exports = {
     `<script src='${prefix}/static/js/vendor.chunk.js'></script>`,
     `<script src='${prefix}/static/js/Page.chunk.js'></script>`
   ], // 客户端需要加载的静态资源文件表
-  serverJs: resolvePath('./dist/Page.server.js')
+  serverJs: resolvePath('./web/entry') // 请不要修改此路径否则将无法运行
 }
