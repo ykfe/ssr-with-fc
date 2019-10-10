@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { prefix } from '../../../config/config.ssr'
+import config from '../../../config/config.ssr'
 import './index.less'
 
 function Page (props) {
@@ -12,7 +12,7 @@ function Page (props) {
           props.news && props.news.map(item => (
             <li key={item.id}>
               <div>文章标题: {item.title}</div>
-              <div className='toDetail'><Link to={`${prefix}/news/${item.id}`}>点击查看详情</Link></div>
+              <div className='toDetail'><Link to={`${config.prefix}/news/${item.id}`}>点击查看详情</Link></div>
             </li>
           ))
         }

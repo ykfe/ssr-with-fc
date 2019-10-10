@@ -1,10 +1,11 @@
-const resolvePath = (path) => require('path').resolve(__dirname, path)
-const isDev = process.env.local
+const resolvePath = (path) => require('path').resolve(process.cwd(), path)
+const isDev = process.env.local || process.env.NODE_ENV === 'development'
 const prefix = isDev ? '/2016-08-15/proxy/ssr/page' : '' // 静态资源路径前缀
 
 module.exports = {
   type: 'ssr', // 指定运行类型可设置为csr切换为客户端渲染
   prefix,
+  externals: false,
   routes: [
     {
       path: '/',
@@ -21,7 +22,6 @@ module.exports = {
       handler: 'index'
     }
   ],
-  baseDir: resolvePath('../'),
   injectCss: [
     `${prefix}/static/css/Page.chunk.css`
   ], // 客户端需要加载的静态样式表
@@ -30,5 +30,5 @@ module.exports = {
     `<script src='${prefix}/static/js/vendor.chunk.js'></script>`,
     `<script src='${prefix}/static/js/Page.chunk.js'></script>`
   ], // 客户端需要加载的静态资源文件表
-  serverJs: resolvePath(`../dist/Page.server.js`)
+  serverJs: resolvePath('./dist/Page.server.js')
 }

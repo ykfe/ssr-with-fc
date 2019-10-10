@@ -1,6 +1,7 @@
-const express = require('express')
-const { renderToStream } = require('ykfe-utils')
-const ssrConfig = require('./config/config.ssr')
+import express from 'express'
+import { renderToStream } from 'ykfe-utils'
+import ssrConfig from './config/config.ssr'
+
 const isDev = process.env.local
 
 const createServer = () => {
@@ -41,8 +42,4 @@ const createServer = () => {
   return server
 }
 
-const server = createServer()
-
-module.exports = {
-  server
-}
+export const server = createServer()

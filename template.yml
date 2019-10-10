@@ -17,7 +17,7 @@ Resources:
     page:
       Type: 'Aliyun::Serverless::Function'
       Properties:
-        Handler: index.handler
+        Handler: ./dist/FC.server.handler
         CodeUri: '.'
         Description: 'fc ssr demo with nodejs8!'
         Runtime: nodejs8

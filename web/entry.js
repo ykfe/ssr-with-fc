@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter, StaticRouter, Route } from 'react-router-dom'
 import defaultLayout from '@/layout'
 import { getWrappedComponent, getComponent } from 'ykfe-utils'
-import { routes as Routes, prefix } from '../config/config.ssr'
+import config from '../config/config.ssr'
+const Routes = config.routes
 
 const clientRender = async () => {
   // 客户端渲染||hydrate
@@ -14,7 +15,7 @@ const clientRender = async () => {
         Routes.map(({ path, exact, Component }) => {
           const ActiveComponent = Component()
           const Layout = ActiveComponent.Layout || defaultLayout
-          return <Route exact={exact} key={path} path={`${prefix}${path}`} render={() => {
+          return <Route exact={exact} key={path} path={`${config.prefix}${path}`} render={() => {
             const WrappedComponent = getWrappedComponent(ActiveComponent)
             return <Layout><WrappedComponent /></Layout>
           }} />
