@@ -11,15 +11,25 @@ const plugins = [
     '__isBrowser__': false //eslint-disable-line
   })
 ]
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+
+if (process.env.npm_config_report === 'true') {
+  plugins.push(new BundleAnalyzerPlugin())
+}
+
 module.exports = merge(baseConfig, {
   devtool: isDev ? 'eval-source-map' : '',
   entry: {
     Page: paths.entry
+    // index: paths.index
   },
-  stats: 'errors-only',
+  stats: {
+    modules: true,
+    warnings: false
+  },
   target: 'node',
   // 生产环境将第三方依赖与bundle.server.js打包在一起发布到fc
-  externals: isDev ? nodeExternals({
+  externals: true ? nodeExternals({
     whitelist: /\.(css|less|sass|scss)$/
   }) : '',
   output: {

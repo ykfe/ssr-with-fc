@@ -43,4 +43,6 @@ const createServer = () => {
 
 const server = createServer()
 
-exports.server = server
+module.exports = {
+  server
+}

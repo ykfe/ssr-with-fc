@@ -1,5 +1,3 @@
 web/
 build/
-/node_modules/*
-!/node_modules/@webserverless/fc-express/
-!/node_modules/express/
+

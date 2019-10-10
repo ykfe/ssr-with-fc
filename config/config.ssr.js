@@ -1,5 +1,6 @@
 const resolvePath = (path) => require('path').resolve(__dirname, path)
-const prefix = '/2016-08-15/proxy/ssr/page' // 静态资源路径前缀
+const isDev = process.env.local
+const prefix = isDev ? '/2016-08-15/proxy/ssr/page' : '' // 静态资源路径前缀
 
 module.exports = {
   type: 'ssr', // 指定运行类型可设置为csr切换为客户端渲染

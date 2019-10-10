@@ -2,6 +2,8 @@
 
 在本项目中，我们将[egg-react-ssr](https://github.com/ykfe/egg-react-ssr)项目运行在阿里云Serverless函数计算服务[FC](https://help.aliyun.com/document_detail/52895.html?spm=a2c4g.11186623.6.541.45c9368bqWeNxZ)上
 
+[在线地址](http://egg.fedte.cc/)
+
 ## Serverless
 
 > Serverless 架构是指大量依赖第三方服务（也叫做后端即服务，即“BaaS”）或暂存容器中运行的自定义代码（函数即服务，即“FaaS”）的应用程序，函数是无服务器架构中抽象语言运行时的最小单位。在这种架构中，我们并不看重运行一个函数需要多少 CPU 或 RAM 或任何其他资源，而是更看重运行函数所需的时间，我们也只为这些函数的运行时间付费。
