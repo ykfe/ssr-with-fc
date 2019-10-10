@@ -20,6 +20,15 @@
 ROSTemplateFormatVersion: '2015-09-01' # fc固定格式内容要求
 Transform: 'Aliyun::Serverless-2018-04-03' # fc固定格式内容要求
 Resources:
+ egg.fedte.cc: # 自定义线上域名
+    Type: 'Aliyun::Serverless::CustomDomain'
+    Properties:
+      Protocol: HTTP
+      RouteConfig:
+        routes: # 应用路由
+          '/*':
+            ServiceName: ssr
+            FunctionName: page
   ssr: # server name 服务名
     Type: 'Aliyun::Serverless::Service'
     Properties:
@@ -64,7 +73,7 @@ $ open http://localhost:8888/2016-08-15/proxy/ssr/page/ // 以 CSR 模式运行
 
 关于FC如何接入express请查看该[教程](https://github.com/muxiangqiu/fc-express-nodejs8)
 
-### 代理前端静态资源支持HMR
+### 本地开发代理前端静态资源支持HMR
 
 如果你对[egg-react-ssr](https://github.com/ykfe/egg-react-ssr)这个项目熟悉的话，在本地开发我们用ykcli去编译我们的前端静态资源文件放在内存中，并且通过webpack-dev-server启动一个服务托管它们。在我们本地开发时我们需要使用这些内存中的文件而不是本地硬盘中的文件。
 
