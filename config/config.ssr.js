@@ -30,5 +30,5 @@ module.exports = {
     `<script src='${prefix}/static/js/vendor.chunk.js'></script>`,
     `<script src='${prefix}/static/js/Page.chunk.js'></script>`
   ], // 客户端需要加载的静态资源文件表
-  serverJs: resolvePath('./web/entry') // 请不要修改此路径否则将无法运行
+  serverJs: 'entry' // web/entry
 }

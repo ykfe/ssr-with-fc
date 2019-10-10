@@ -7,7 +7,7 @@
     "react": "16.8.3",
     "react-dom": "^16.8.3",
     "react-router-dom": "^5.0.0",
-    "ykfe-utils": "^2.1.11"
+    "ykfe-utils": "^2.1.14"
   },
   "scripts": {
     "start": "concurrently \"npm run ssr\" \"npm run csr\"",

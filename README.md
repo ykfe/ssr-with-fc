@@ -96,7 +96,8 @@ $ open http://localhost:8888/2016-08-15/proxy/ssr/page/ // 以 CSR 模式运行
 
 ## 线上发布
 
-由于FC有应用发布大小的限制，所以与egg-react-ssr项目不同，生产环境我们修改了`webpack.config.server.js`去除了`externanls`选项来将一些第三方库与我们的bundle.server.js打在了一起，经过测试在生产环境压缩后的bundle.server.js在200kb左右时性能无明显影响，但当第三方库过多时如果超过几MB时对性能有影响。优点是我们不需要将node_modules上传到云端了发布速度更快。
+由于FC有应用发布大小的限制，所以与egg-react-ssr项目我们的发布方式不同，在生产环境我们修改了`webpack.config.server.js`去除了`externanls`选项来将一些第三方库与我们的bundle.server.js打在了一起，经过测试在生产环境压缩后的bundle.server.js在200kb左右时性能无明显影响，但当第三方库过多时如果超过几MB时对ttfb性能有影响。优点是我们不需要将node_modules上传到云端了发布速度更快, 需要发布的包更小。
+`注：由于需要使用webpack去处理服务端Node相关代码，由于webpack require expression的特性不支持动态故请不要随意修改本应用目录结构，否则可能无法运行`
 发布前确保已经通过fun config进行个人帐户的设置，且需要绑定[自定义域名](https://help.aliyun.com/document_detail/90722.html?spm=a2c4g.11174283.6.682.1a245212Zcy5ax)解析到FC的触发器,否则无法访问
 
 ```
