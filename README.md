@@ -94,15 +94,73 @@ $ open http://localhost:8888/2016-08-15/proxy/ssr/page/ // 以 CSR 模式运行
 - 通过ifconfig查看本机ip，替换localhost
 - 使用host.docker.internal来访问宿主机服务
 
-## 线上发布
+## 两种线上发布方式
 
-由于FC有应用发布大小的限制，所以与egg-react-ssr项目我们的发布方式不同，在生产环境我们修改了`webpack.config.server.js`去除了`externanls`选项来将一些第三方库与我们的bundle.server.js打在了一起，经过测试在生产环境压缩后的bundle.server.js在200kb左右时性能无明显影响，但当第三方库过多时如果超过几MB时对ttfb性能有影响。优点是我们不需要将node_modules上传到云端了发布速度更快, 需要发布的包更小。
+由于FC有应用发布大小的限制，压缩后代码小于50M, 解压后小于200M。所以与egg-react-ssr项目我们的发布方式不同，在生产环境我们修改了`webpack.config.server.js`去除了`externanls`选项来将一些第三方库与我们的bundle.server.js打在了一起，经过测试在生产环境压缩后的bundle.server.js在200kb左右时性能无明显影响，但当第三方库过多时如果超过几MB时对ttfb性能有影响。优点是我们不需要将node_modules上传到云端了发布速度更快, 需要发布的包更小。
 `注：由于需要使用webpack去处理服务端Node相关代码，由于webpack require expression的特性不支持动态故请不要随意修改本应用目录结构，否则可能无法运行`
 发布前确保已经通过fun config进行个人帐户的设置，且需要绑定[自定义域名](https://help.aliyun.com/document_detail/90722.html?spm=a2c4g.11174283.6.682.1a245212Zcy5ax)解析到FC的触发器,否则无法访问
 
+那么让我们来对比一下两种发布方式的优缺点
+
+### 打包开启externals选项
+
+开启此选项的目的是将第三方模块依赖外置，此时需要保证我们的运行环境存在node_modules, 为了尽量控制包大小，我们只安装生产环境所需依赖
+
+- 优点： 启动速度更快，服务端bundle更小
+- 缺点： 需要上传的代码量大，上传速度慢
+
 ```
-$ npm run deploy
+$ npm run build
+$ rm -rf node_modules && npm i --production
+$ fun deploy
 ```
+
+bundle.server.js 大小 开发环境在 260kB 左右， 生产环境在 6KB 左右
+
+具体发布信息
+
+![](https://img.alicdn.com/tfs/TB1cxh4iLb2gK0jSZK9XXaEgFXa-1188-790.jpg)
+
+可以看到我们上传了压缩后在20MB大小的代码，上传时间大概在20S左右
+
+![](https://img.alicdn.com/tfs/TB15YR6iNn1gK0jSZKPXXXvUXXa-2878-1222.jpg)
+
+TTFB 时间在 50ms 左右 白屏时间在 168ms 左右
+
+![](https://img.alicdn.com/tfs/TB1yOt4iKT2gK0jSZFvXXXnFXXa-2492-990.jpg)
+
+函数执行时间 8ms， 运行内存在25MB
+
+### 不开启externals选项
+
+通过这种方式我们将node_modules中的依赖与我们的业务代码打包在了一起
+
+- 优点，上传速度快，需要上传的总代码量变小
+- 缺点，服务端bundle会变大很多，特别是本地开发的时候明显增大
+
+```
+$ npm run build && fun deploy
+```
+
+bundle.server.js 大小 开发环境在 16MB 左右， 生产环境在 3.6MB 左右
+
+具体发布信息
+
+![](https://img.alicdn.com/tfs/TB1c9iXiUY1gK0jSZFCXXcwqXXa-1134-746.jpg)
+
+可以看到我们上传了压缩后在1MB大小的代码，上传时间大概在2S左右
+
+![](https://img.alicdn.com/tfs/TB1cfd7iFT7gK0jSZFpXXaTkpXa-2878-1350.jpg)
+
+TTFB 时间在 50ms 左右 白屏时间在 168ms 左右
+
+![](https://img.alicdn.com/tfs/TB1Icd7iFT7gK0jSZFpXXaTkpXa-2490-930.jpg)
+
+函数执行时间 6ms， 运行内存在30MB
+
+### 总结
+
+通过性能对比我们可以发现后者的上传发布速度明显快于前者，虽然在本例中白屏时间对比不是很明显，但随着第三方依赖的增多可以预计TTFB时间必然是要增大的。根据本地开发打包的性能显示当bundle.server.js大小超过15MB时对性能有较明显影响。
 
 ## Serverless与传统方案对比
 

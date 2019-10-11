@@ -1,4 +1,3 @@
-const resolvePath = (path) => require('path').resolve(process.cwd(), path)
 const isDev = process.env.local || process.env.NODE_ENV === 'development'
 const prefix = isDev ? '/2016-08-15/proxy/ssr/page' : '' // 静态资源路径前缀
 

@@ -27,10 +27,6 @@ module.exports = merge(baseConfig, {
     warnings: false
   },
   target: 'node',
-  // 生产环境将第三方依赖与bundle.server.js打包在一起发布到fc
-  externals: isDev ? nodeExternals({
-    whitelist: /\.(css|less|sass|scss)$/
-  }) : '',
   output: {
     path: paths.appBuild,
     publicPath: '/',
