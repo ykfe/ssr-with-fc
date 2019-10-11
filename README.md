@@ -136,31 +136,35 @@ TTFB 时间在 50ms 左右 白屏时间在 168ms 左右
 通过这种方式我们将node_modules中的依赖与我们的业务代码打包在了一起
 
 - 优点，上传速度快，需要上传的总代码量变小
-- 缺点，服务端bundle会变大很多，特别是本地开发的时候明显增大
+- 缺点，服务端bundle会增大导致运行内存增加，特别是本地开发的时候明显增大, webpack打包构建速度变慢
+
+为了更明显的比较两种方式，我们引入多个第三方库测试性能
 
 ```
+$ npm i antd antd-mobile axios
 $ npm run build && fun deploy
 ```
 
-bundle.server.js 大小 开发环境在 16MB 左右， 生产环境在 3.6MB 左右
+bundle.server.js 大小 开发环境在 35MB 左右， 生产环境在 4.4MB 左右
 
 具体发布信息
 
-![](https://img.alicdn.com/tfs/TB1c9iXiUY1gK0jSZFCXXcwqXXa-1134-746.jpg)
+![](https://img.alicdn.com/tfs/TB1vH1viRr0gK0jSZFnXXbRRXXa-1082-802.jpg)
 
-可以看到我们上传了压缩后在1MB大小的代码，上传时间大概在2S左右
+可以看到我们上传了压缩后在4.4MB大小的代码，上传时间大概在2S左右
 
-![](https://img.alicdn.com/tfs/TB1cfd7iFT7gK0jSZFpXXaTkpXa-2878-1350.jpg)
+![](https://gw.alicdn.com/tfs/TB1zi1uiQT2gK0jSZPcXXcKkpXa-2878-1170.jpg)
 
-TTFB 时间在 50ms 左右 白屏时间在 168ms 左右
+TTFB 时间在 50ms 左右 白屏时间在 168ms 左右, 无明显变化
 
-![](https://img.alicdn.com/tfs/TB1Icd7iFT7gK0jSZFpXXaTkpXa-2490-930.jpg)
+![](https://gw.alicdn.com/tfs/TB1JWSsiNn1gK0jSZKPXXXvUXXa-2462-878.jpg)
 
-函数执行时间 6ms， 运行内存在30MB
+函数执行时间 6ms，首次运行内存129MB, 后续运行内存在52MB，运行内存显著增大
 
 ### 总结
 
-通过性能对比我们可以发现后者的上传发布速度明显快于前者，虽然在本例中白屏时间对比不是很明显，但随着第三方依赖的增多可以预计TTFB时间必然是要增大的。根据本地开发打包的性能显示当bundle.server.js大小超过15MB时对性能有较明显影响。
+通过性能对比我们可以发现后者的上传发布速度明显快于前者，随着bundle的增大，对二次访问之后的TTFB时间无显著影响，但运行内存显著增大，且打包构建速度明显变慢。
+综上所述我们建议用第二种发布方式，为了更快的发布速度。且随着第三方模块的增多，我们的node_modules会有超过FC限制大小的风险。
 
 ## Serverless与传统方案对比
 
