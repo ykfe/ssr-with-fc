@@ -1,6 +1,7 @@
 import express from 'express'
+import renderToStream from 'ykfe-utils/lib/renderToStream'
+
 const ssrConfig = require('./config/config.ssr')
-const { renderToStream } = require('ykfe-utils')
 
 const isDev = process.env.local
 
@@ -31,10 +32,14 @@ const createServer = () => {
       const stream = await renderToStream(ctx, ssrConfig)
       res.status(200)
         .set('Content-Type', 'text/html')
-      stream.pipe(res, { end: 'false' })
-      stream.on('end', () => {
-        res.end()
-      })
+      if (typeof stream === 'string') {
+        res.end(stream)
+      } else {
+        stream.pipe(res, { end: 'false' })
+        stream.on('end', () => {
+          res.end()
+        })
+      }
     })
   })
   server.use(express.static('dist'))

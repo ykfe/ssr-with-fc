@@ -161,10 +161,22 @@ TTFB 时间在 50ms 左右 白屏时间在 240ms 左右, 无明显变化
 
 函数执行时间 6ms，首次运行内存129MB, 后续运行内存在52MB，运行内存显著增大, 因为我们一次性加载了所有的服务端bundle会包含一些暂时用不到的模块
 
-### 总结
+## 总结
 
-通过性能对比我们可以发现后者的上传发布速度明显快于前者，随着bundle的增大，对二次访问之后的TTFB时间无显著影响，但运行内存显著增大，且打包构建速度明显变慢。
-综上所述我们建议用第二种发布方式，为了更快的发布速度。且随着第三方模块的增多，使用第一种发布方式我们的node_modules会有超过FC限制大小的风险。
+区分与传统的Node.js应用，在serverless场景下，我们一般不上传node_modules来将整个服务端文件打包成一个bundle后发布，这种方式存在以下优缺点
+
+### 优势
+
+发布快
+
+### 劣势
+
+将所有服务端代码打包到一个bundle存在以下问题
+- 编译后代码无法debug是黑盒
+- webpack打包时会静态分析代码，导致实际执行时不会运行报错的代码在编译阶段报错
+- webpack打包treeshaking基于es6 modules，如果第三方模块没有导出es6 modules格式的模块或者哪块不小心使用了commonjs会导致最后的代码bundle非常大需要手动将执行时不需要的依赖externals(排除)掉
+
+最佳打包方案正在探索中
 
 ## Serverless与传统方案对比
 
@@ -198,3 +210,9 @@ Serverless第二个常被提及的特点是自动扩缩容。前面说了函数�
 ## 未来可优化空间
 
 目前看起来本项目所包含的文件还是略有多余。在之后我们将会将egg, koa, express 等框架内置进 faasruntime，启动的时候指定框架类型即可。且相关的webpack配置之后将会以脚手架的形式进行封装而不暴露在应用内部
+
+## 答疑群
+
+虽然我们已经尽力检查了一遍应用，但仍有可能有疏漏的地方，如果你在使用过程中发现任何问题或者建议，欢迎提[issue](https://github.com/ykfe/ssr-with-fc/issues)或者[PR](https://github.com/ykfe/ssr-with-fc/pulls)
+欢迎直接扫码加入钉钉群
+<img src="https://img.alicdn.com/tfs/TB1CONSclGE3KVjSZFhXXckaFXa-750-990.jpg" width="300">

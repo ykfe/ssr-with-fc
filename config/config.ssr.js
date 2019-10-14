@@ -2,9 +2,9 @@ const isDev = process.env.local || process.env.NODE_ENV === 'development'
 const prefix = isDev ? '/2016-08-15/proxy/ssr/page' : '' // 静态资源路径前缀
 
 module.exports = {
-  type: 'ssr', // 指定运行类型可设置为csr切换为客户端渲染
+  type: 'csr', // 指定运行类型可设置为csr切换为客户端渲染
   prefix,
-  runtime: 'fc',
+  runtime: 'serverless',
   routes: [
     {
       path: '/',

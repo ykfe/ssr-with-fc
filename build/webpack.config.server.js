@@ -19,8 +19,10 @@ if (process.env.npm_config_report === 'true') {
 module.exports = merge(baseConfig, {
   devtool: isDev ? 'eval-source-map' : '',
   entry: {
-    FC: paths.fc
+    FC: paths.fc,
+    Layout: require('path').resolve(__dirname, '../web/layout')
   },
+  externals: /aws-sdk|electron|webpack/,
   stats: {
     modules: true,
     warnings: false
