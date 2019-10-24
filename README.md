@@ -20,7 +20,7 @@
 ROSTemplateFormatVersion: '2015-09-01' # fc固定格式内容要求
 Transform: 'Aliyun::Serverless-2018-04-03' # fc固定格式内容要求
 Resources:
- egg.fedte.cc: # 自定义线上域名
+ ssr-fc.com: # 自定义线上域名
     Type: 'Aliyun::Serverless::CustomDomain'
     Properties:
       Protocol: HTTP
