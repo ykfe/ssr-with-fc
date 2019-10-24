@@ -22,7 +22,7 @@ module.exports = merge(baseConfig, {
     FC: paths.fc,
     Layout: require('path').resolve(__dirname, '../web/layout')
   },
-  externals: /aws-sdk|electron|webpack/,
+  externals: /aws-sdk|electron|webpack-dev-server|css/,
   stats: {
     modules: true,
     warnings: false
