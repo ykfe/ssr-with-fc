@@ -38,17 +38,9 @@ const webpackModule = {
                 }
               ],
               '@babel/preset-react'
-            ],
-            plugins: [
-              // '@babel/plugin-transform-runtime',
             ]
           }
         },
-        // {
-        //   test: /\.mjs$/,
-        //   include: /node_modules/,
-        //   type: 'javascript/auto'
-        // },
         {
           test: /\.css$/,
           exclude: /\.module\.css$/,
