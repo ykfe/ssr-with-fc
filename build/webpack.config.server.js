@@ -1,6 +1,8 @@
 
 const webpack = require('webpack')
 const merge = require('webpack-merge')
+const path = require('path')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const baseConfig = require('./webpack.config.base')
 const paths = require('./paths')
 const isDev = process.env.NODE_ENV === 'development'
@@ -10,7 +12,6 @@ const plugins = [
     '__isBrowser__': false //eslint-disable-line
   })
 ]
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 if (process.env.npm_config_report === 'true') {
   plugins.push(new BundleAnalyzerPlugin())
@@ -20,12 +21,14 @@ module.exports = merge(baseConfig, {
   devtool: isDev ? 'eval-source-map' : '',
   entry: {
     FC: paths.fc,
-    Layout: require('path').resolve(__dirname, '../web/layout')
+    Layout: path.resolve(__dirname, '../web/layout')
   },
-  externals: /aws-sdk|electron|webpack-dev-server|css/,
   stats: {
     modules: true,
     warnings: false
+  },
+  node: {
+    __dirname: true
   },
   target: 'node',
   output: {

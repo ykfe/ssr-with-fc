@@ -5,19 +5,19 @@
     "@webserverless/fc-express": "0.1.1",
     "express": "4.17.1",
     "react": "16.8.3",
-    "react-dom": "^16.8.3",
+    "react-dom": "16.8.3",
     "react-router-dom": "^5.0.0",
-    "ykfe-utils": "^2.1.14"
+    "ykfe-utils": "^3.0.0-beta.0"
   },
   "scripts": {
     "start": "concurrently \"npm run ssr\" \"npm run csr\"",
     "ssr": "concurrently \"fun local start\" \"cross-env NODE_ENV=development webpack --watch --config ./build/webpack.config.server.js\"",
-    "csr": "cross-env NODE_ENV=development ykcli dev --PORT 8888",
+    "csr": "cross-env NODE_ENV=development RUNTIME=serverless ykcli dev --PORT 8888",
     "debug": "concurrently \"fun local start -d 3000 --config vscode\" \"cross-env NODE_ENV=development webpack --watch --config ./build/webpack.config.server.js\"",
     "deploy": "npm run build && fun deploy",
-    "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.config.server.js",
-    "build:client": "cross-env NODE_ENV=production ykcli build",
-    "build": "rimraf dist && npm run build:client && npm run build:server",
+    "build:server": "cross-env NODE_ENV=production webpack --display-used-exports --optimize-minimize --config build/webpack.config.server.js",
+    "build:client": "cross-env NODE_ENV=production RUNTIME=serverless ykcli build",
+    "build": "rimraf dist && npm run build:server && npm run build:client",
     "analyze": "cross-env NODE_ENV=production npm_config_report=true ykcli build"
   },
   "browserslist": [
@@ -60,7 +60,6 @@
     "webpack-cli": "^3.3.3",
     "webpack-dev-server": "3.3.1",
     "webpack-manifest-plugin": "^2.0.4",
-    "webpack-merge": "^4.1.4",
-    "yk-cli": "^2.6.2"
+    "webpack-merge": "^4.1.4"
   }
 }

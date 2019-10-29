@@ -33,22 +33,22 @@ const webpackModule = {
               [
                 '@babel/preset-env',
                 {
-                  modules: false
+                  modules: false,
+                  loose: true
                 }
               ],
               '@babel/preset-react'
             ],
             plugins: [
-              '@babel/plugin-transform-runtime',
-              '@babel/plugin-transform-modules-commonjs'
+              // '@babel/plugin-transform-runtime',
             ]
           }
         },
-        {
-          test: /\.mjs$/,
-          include: /node_modules/,
-          type: 'javascript/auto'
-        },
+        // {
+        //   test: /\.mjs$/,
+        //   include: /node_modules/,
+        //   type: 'javascript/auto'
+        // },
         {
           test: /\.css$/,
           exclude: /\.module\.css$/,

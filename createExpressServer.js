@@ -1,8 +1,7 @@
 import express from 'express'
-import renderToStream from 'ykfe-utils/lib/renderToStream'
+import renderToStreamForFaas from 'ykfe-utils/es/renderToStreamForFass'
 
 const ssrConfig = require('./config/config.ssr')
-
 const isDev = process.env.local
 
 const createServer = () => {
@@ -12,7 +11,7 @@ const createServer = () => {
     // 为了docker可以使用宿主机的服务，这里需要使用本机IP地址
     server.use('*', proxy(`http://host.docker.internal:8888`, {
       filter: function (req, res) {
-        return /(\/static)|(\/sockjs-node)|(\/__webpack_dev_server__)|hot-update/.test(req.baseUrl)
+        return /(\/static)|(\/sockjs-node)|hot-update/.test(req.baseUrl)
       },
       proxyReqPathResolver: function (req) {
         return '/2016-08-15/proxy/ssr/page' + req.baseUrl
@@ -29,17 +28,13 @@ const createServer = () => {
           config: ssrConfig
         }
       }
-      const stream = await renderToStream(ctx, ssrConfig)
+      const stream = await renderToStreamForFaas(ctx, ssrConfig)
       res.status(200)
         .set('Content-Type', 'text/html')
-      if (typeof stream === 'string') {
-        res.end(stream)
-      } else {
-        stream.pipe(res, { end: 'false' })
-        stream.on('end', () => {
-          res.end()
-        })
-      }
+      stream.pipe(res, { end: 'false' })
+      stream.on('end', () => {
+        res.end()
+      })
     })
   })
   server.use(express.static('dist'))
