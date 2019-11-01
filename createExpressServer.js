@@ -28,13 +28,18 @@ const createServer = () => {
           config: ssrConfig
         }
       }
-      const stream = await renderToStreamForFaas(ctx, ssrConfig)
-      res.status(200)
-        .set('Content-Type', 'text/html')
-      stream.pipe(res, { end: 'false' })
-      stream.on('end', () => {
-        res.end()
-      })
+      try {
+        const stream = await renderToStreamForFaas(ctx, ssrConfig)
+        res.status(200)
+          .set('Content-Type', 'text/html')
+        res.write('<!DOCTYPE html>')
+        stream.pipe(res, { end: 'false' })
+        stream.on('end', () => {
+          res.end()
+        })
+      } catch (error) {
+        console.log(`renderStream Error ${error}`)
+      }
     })
   })
   server.use(express.static('dist'))
