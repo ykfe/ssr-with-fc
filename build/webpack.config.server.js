@@ -6,7 +6,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const baseConfig = require('./webpack.config.base')
 const paths = require('./paths')
 const isDev = process.env.NODE_ENV === 'development'
-
 const plugins = [
   new webpack.DefinePlugin({
     '__isBrowser__': false //eslint-disable-line
@@ -22,6 +21,14 @@ module.exports = merge(baseConfig, {
   entry: {
     FC: paths.fc,
     Layout: path.resolve(__dirname, '../web/layout')
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(css|sass|less|scss)$/,
+        use: ['ignore-loader']
+      }
+    ]
   },
   stats: {
     modules: true,

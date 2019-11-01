@@ -7,6 +7,7 @@
     "react": "16.8.3",
     "react-dom": "16.8.3",
     "react-router-dom": "^5.0.0",
+    "stream-to-string": "^1.2.0",
     "ykfe-utils": "^3.0.0-beta.0"
   },
   "scripts": {
@@ -40,6 +41,7 @@
     "css-modules-require-hook": "^4.2.3",
     "express-http-proxy": "^1.6.0",
     "file-loader": "2.0.0",
+    "ignore-loader": "^0.1.2",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "^0.5.0",

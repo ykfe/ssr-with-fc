@@ -3,18 +3,21 @@
 const path = require('path')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-const baseConfig = require('./webpack.config.base')
 const TerserPlugin = require('terser-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const paths = require('./paths')
+const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
 const ManifestPlugin = require('webpack-manifest-plugin')
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin')
 const safePostCssParser = require('postcss-safe-parser')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const baseConfig = require('./webpack.config.base')
+const paths = require('./paths')
 const publicPath = require('../config/config.ssr').prefix + '/'
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
 const isDev = process.env.NODE_ENV === 'development'
 const devtool = isDev ? 'cheap-module-source-map' : (shouldUseSourceMap ? 'source-map' : false)
+const getStyleLoaders = require('./util').getStyleLoaders
+
 const optimization = {
   runtimeChunk: true,
   splitChunks: {
@@ -95,6 +98,60 @@ if (process.env.npm_config_report === 'true') {
   plugins.push(new BundleAnalyzerPlugin())
 }
 
+const webpackModule = {
+  rules: [
+    {
+      oneOf: [
+        {
+          test: /\.css$/,
+          exclude: /\.module\.css$/,
+          use: getStyleLoaders({
+            importLoaders: 1
+          })
+        },
+        {
+          test: /\.module\.css$/,
+          use: getStyleLoaders({
+            importLoaders: 1,
+            modules: true,
+            getLocalIdent: getCSSModuleLocalIdent
+          })
+        },
+        {
+          test: /\.less$/,
+          exclude: /\.module\.less$/,
+          use: getStyleLoaders(
+            {
+              importLoaders: 2,
+              localIdentName: '[local]'
+            },
+            'less-loader'
+          ),
+          sideEffects: true
+        },
+        {
+          test: /\.module\.less$/,
+          use: getStyleLoaders(
+            {
+              importLoaders: 2,
+              modules: true,
+              getLocalIdent: getCSSModuleLocalIdent
+            },
+            'less-loader'
+          )
+        },
+        {
+          exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
+          loader: require.resolve('file-loader'),
+          options: {
+            name: 'static/media/[name].[hash:8].[ext]'
+          }
+        }
+      ]
+    }
+  ]
+}
+
 module.exports = merge(baseConfig, {
   devtool: devtool,
   entry: {
@@ -106,6 +163,7 @@ module.exports = merge(baseConfig, {
       'react-router': require.resolve('react-router')
     }
   },
+  module: webpackModule,
   output: {
     path: paths.appBuild,
     pathinfo: true,

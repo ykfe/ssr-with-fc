@@ -5,8 +5,6 @@ const paths = require('./paths')
 const path = require('path')
 // style files regexes
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const getStyleLoaders = require('./util').getStyleLoaders
-const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
 
 const webpackModule = {
   strictExportPresence: true,
@@ -39,51 +37,6 @@ const webpackModule = {
               ],
               '@babel/preset-react'
             ]
-          }
-        },
-        {
-          test: /\.css$/,
-          exclude: /\.module\.css$/,
-          use: getStyleLoaders({
-            importLoaders: 1
-          })
-        },
-        {
-          test: /\.module\.css$/,
-          use: getStyleLoaders({
-            importLoaders: 1,
-            modules: true,
-            getLocalIdent: getCSSModuleLocalIdent
-          })
-        },
-        {
-          test: /\.less$/,
-          exclude: /\.module\.less$/,
-          use: getStyleLoaders(
-            {
-              importLoaders: 2,
-              localIdentName: '[local]'
-            },
-            'less-loader'
-          ),
-          sideEffects: true
-        },
-        {
-          test: /\.module\.less$/,
-          use: getStyleLoaders(
-            {
-              importLoaders: 2,
-              modules: true,
-              getLocalIdent: getCSSModuleLocalIdent
-            },
-            'less-loader'
-          )
-        },
-        {
-          exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
-          loader: require.resolve('file-loader'),
-          options: {
-            name: 'static/media/[name].[hash:8].[ext]'
           }
         }
       ]
