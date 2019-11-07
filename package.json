@@ -8,7 +8,7 @@
     "react-dom": "16.8.3",
     "react-router-dom": "^5.0.0",
     "stream-to-string": "^1.2.0",
-    "ykfe-utils": "^3.0.0-beta.0"
+    "ykfe-utils": "^2.0.0"
   },
   "scripts": {
     "start": "concurrently \"npm run ssr\" \"npm run csr\"",
