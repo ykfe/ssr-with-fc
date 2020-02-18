@@ -1,5 +1,7 @@
 # SSR 结合 阿里云 Serverless FC(function computed) 示例
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/ykfe/ssr-with-fc.svg)](https://greenkeeper.io/)
+
 在本项目中，我们将[egg-react-ssr](https://github.com/ykfe/egg-react-ssr)项目运行在阿里云Serverless函数计算服务[FC](https://help.aliyun.com/document_detail/52895.html?spm=a2c4g.11186623.6.541.45c9368bqWeNxZ)上
 
 [在线地址](http://ssr-fc.com)
