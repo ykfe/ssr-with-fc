@@ -1,3 +1,7 @@
+# 声明
+
+本项目已不再维护，请使用最新的Serverless场景下的[SSR框架](https://github.com/ykfe/ssr)。
+
 # SSR 结合 阿里云 Serverless FC(function computed) 示例
 
 在本项目中，我们将[egg-react-ssr](https://github.com/ykfe/egg-react-ssr)项目运行在阿里云Serverless函数计算服务[FC](https://help.aliyun.com/document_detail/52895.html?spm=a2c4g.11186623.6.541.45c9368bqWeNxZ)上
@@ -55,8 +59,7 @@ Resources:
 ```
 $ npm i
 $ npm start
-$ open http://localhost:8000/2016-08-15/proxy/ssr/page/ // 以FC SSR 模式运行
-$ open http://localhost:8888/2016-08-15/proxy/ssr/page/ // 以 CSR 模式运行
+$ open http://localhost:8000/2016-08-15/proxy/ssr/page/
 ```
 
 注：FC启动的应用链接规范为 `http://localhost:8000/2016-08-15/proxy/${service name}/${function name}/`

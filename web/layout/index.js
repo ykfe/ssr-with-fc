@@ -42,6 +42,9 @@ const Layout = (props) => {
           <div dangerouslySetInnerHTML={{
             __html: injectScript && injectScript.join('')
           }} />
+          <div class="record">
+            <a href="http://www.beian.miit.gov.cn/">京ICP备19047855号</a>
+          </div>
         </body>
       </html>
     )

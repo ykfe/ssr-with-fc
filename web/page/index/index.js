@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import config from '../../../config/config.ssr'
 import './index.less'
 
 function Page (props) {
+  useEffect(() => {
+    console.log('xx')
+  })
   return (
     <div className='normal'>
       <div className='welcome' />

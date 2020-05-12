@@ -1,0 +1,30 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  ssr:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: fc ssr demo
+      InternetAccess: true
+    page:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Description: fc ssr demo with nodejs8!
+        Handler: ./dist/FC.server.handler
+        Runtime: nodejs8
+        Timeout: 3
+        MemorySize: 128
+        InstanceConcurrency: 1
+        EnvironmentVariables:
+          LD_LIBRARY_PATH: >-
+            /code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib
+          PATH: >-
+            /code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin
+          PYTHONUSERBASE: /code/.fun/python
+      Events:
+        http-test:
+          Type: HTTP
+          Properties:
+            AuthType: anonymous
+            Methods:
+              - GET
